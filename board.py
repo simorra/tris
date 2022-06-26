@@ -2,6 +2,7 @@ class Board:
   def __init__(self, dim = 3):
     self.cells = [' '] * dim**2 # flat array
     self.dim = dim
+    self.history = []
 
   def __str__(self):
     rows = []
@@ -78,3 +79,16 @@ class Board:
       raise ValueError(f'The cell {row}, {col} is already occupied')
 
     self.cells[row*self.dim + col] = player
+    self.history.append((player, row, col))
+
+  def revert_last_move(self):
+    player, row, col = self.history.pop()
+    self.cells[row*self.dim + col] = ' '
+
+  def get_empty_cells(self):
+    empty_cells = []
+    for i in range(self.dim):
+      for j in range(self.dim):
+        if self.cells[i*self.dim + j] == ' ':
+          empty_cells.append((i, j))
+    return empty_cells
